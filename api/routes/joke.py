@@ -10,9 +10,10 @@ from api.services.joke import Joke as Service
 router = APIRouter()
 
 
-@router.get('/jokes/random',  tags=["Jokes"])
+@router.get('/jokes/random', response_model=Joke, tags=["Jokes"])
 async def random(param: JokeType):
-    pass
+    service = Service()
+    return service.get(param)
 
 
 @router.get('/jokes', response_model=list[Joke], tags=["Jokes"])
