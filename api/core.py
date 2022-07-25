@@ -6,7 +6,12 @@ from dotenv import load_dotenv
 from starlette.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import Response
+import functools
+import io
+import yaml
 
+from api.config import database
 from api.config.docs import *
 from api.config.cors import *
 from api.config.api import API_NAME, API_VERSION, API_DESCRIPTION, API_PREFIX
@@ -40,7 +45,7 @@ api.mount('/public', StaticFiles(directory='public'), name='public')
 
 @api.on_event('startup')
 async def startup_event():
-    pass
+    database.create_jokes_db()
 
 
 @api.on_event('shutdown')
@@ -63,6 +68,15 @@ async def custom_swagger_ui_html():
 @api.get('/', tags=['Root'])
 def root():
     return RedirectResponse(url=API_PREFIX, status_code=303)
+
+
+@api.get('/openapi.yaml', tags=['Root'])
+@functools.lru_cache()
+def read_openapi_yaml() -> Response:
+    openapi_json= api.openapi()
+    yaml_s = io.StringIO()
+    yaml.dump(openapi_json, yaml_s)
+    return Response(yaml_s.getvalue(), media_type='text/yaml')
 
 
 @api.get(API_PREFIX, include_in_schema=False, tags=['Root'])
