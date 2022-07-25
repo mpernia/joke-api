@@ -33,6 +33,29 @@ Ejecute el siguiente comando para hacer una copia del fichero de configuración:
 cp .env.example .env
 ```
 
+
+### Base de Datos
+
+En el proyecto puede utilizar las siguientes bases de datos:
+* MySQL
+* SQLite
+* PosgreSql
+* MongoDB
+
+
+Edite el fichero ``.env`` sustituya el valor del parámetro ``DB_CONNECTION`` por el que corresponda según la siguiente relación:
+* **MySQL** -> _mysql_
+* **SQLite** -> _sqlite_
+* **PosgreSql** -> _pgsql_
+* **MongoDB** -> _mongodb_
+
+Modifique los valores para la conexión a la base de datos:
+* DB_HOST
+* DB_USER
+* DB_PASSWORD
+* DB_NAME
+
+
 ## Ejecución
 
 Luego de instalados las dependencias y definida la configuraciópn de conexión a la base de datos, desde el directorio raíz del proyecto ejecute el comando:
@@ -40,3 +63,4 @@ Luego de instalados las dependencias y definida la configuraciópn de conexión 
 ```shell
 python3 ./main.py
 ```
+

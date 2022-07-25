@@ -11,12 +11,11 @@ import functools
 import io
 import yaml
 
-from api.config import database
+from api.config import migrations
 from api.config.docs import *
 from api.config.cors import *
 from api.config.api import API_NAME, API_VERSION, API_DESCRIPTION, API_PREFIX
 from api.routes.api import router
-
 
 api = FastAPI(
     docs_url=None,
@@ -45,11 +44,11 @@ api.mount('/public', StaticFiles(directory='public'), name='public')
 
 @api.on_event('startup')
 async def startup_event():
-    database.create_jokes_db()
+    migrations.create_tables()
 
 
 @api.on_event('shutdown')
-def shutdown_event():
+async def shutdown_event():
     pass
 
 
